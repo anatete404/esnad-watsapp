@@ -1,13 +1,17 @@
 ﻿import os
 import requests
 from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse
 from openai import OpenAI
 from dotenv import load_dotenv
+from pydantic import BaseModel
 
 load_dotenv()
 
 app = FastAPI()
+
+class ChatRequest(BaseModel):
+    message: str
 
 # إعداد عميل الموديل (Groq)
 client = OpenAI(
@@ -31,9 +35,10 @@ def get_company_info():
 
 company_context = get_company_info()
 
-@app.get("/")
-def read_root():
-    return {"status": "ok", "message": "Esnad Chatbot is running!"}
+@app.get("/", response_class=HTMLResponse)
+async def serve_index():
+    with open("index.html", "r", encoding="utf-8") as f:
+        return f.read()
 
 # 1) التحقق من الـ Webhook
 @app.get("/webhook")
@@ -79,6 +84,23 @@ async def receive_message(request: Request):
         
     return {"status": "ok"}
 
+@app.post("/api/chat")
+async def web_chat(request: ChatRequest):
+    user_text = request.message
+    try:
+        response = client.chat.completions.create(
+            model="openai/gpt-oss-20b",
+            messages=[
+                {"role": "system", "content": f"أنت مساعد خدمة عملاء ذكي ومحترف لشركة إسناد. استخدم المعلومات دي للرد على العميل: {company_context}"},
+                {"role": "user", "content": user_text}
+            ],
+            temperature=0.5,
+            max_tokens=500
+        )
+        return {"reply": response.choices[0].message.content}
+    except Exception as e:
+        return {"reply": f"حدث خطأ: {e}"}
+
 def send_whatsapp_message(to, text):
     url = f"https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/messages"
     headers = {
@@ -94,4 +116,3 @@ def send_whatsapp_message(to, text):
     res = requests.post(url, headers=headers, json=payload)
     if res.status_code != 200:
         print(f"Failed to send message: {res.text}")
-
