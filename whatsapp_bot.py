@@ -1,7 +1,7 @@
 ﻿import os
 import requests
 from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import HTMLResponse, PlainTextResponse
+from fastapi.responses import HTMLResponse, FileResponse, PlainTextResponse
 from openai import OpenAI
 from dotenv import load_dotenv
 from pydantic import BaseModel
@@ -39,6 +39,14 @@ company_context = get_company_info()
 async def serve_index():
     with open("index.html", "r", encoding="utf-8") as f:
         return f.read()
+
+@app.get("/manifest.json")
+async def serve_manifest():
+    return FileResponse("manifest.json")
+
+@app.get("/sw.js")
+async def serve_sw():
+    return FileResponse("sw.js")
 
 # 1) التحقق من الـ Webhook
 @app.get("/webhook")
