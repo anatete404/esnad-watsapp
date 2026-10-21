@@ -44,6 +44,10 @@ async def serve_index():
 async def serve_manifest():
     return FileResponse("manifest.json")
 
+@app.get("/logo.png")
+async def serve_logo():
+    return FileResponse("logo.png", media_type="image/png")
+
 @app.get("/sw.js")
 async def serve_sw():
     return FileResponse("sw.js")

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#1a2238">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/4712/4712035.png">
+    <link rel="apple-touch-icon" href="/logo.png">
     <title>مساعد إسناد الذكي</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
@@ -20,12 +20,21 @@
         button { background-color: #1a2238; color: white; border: none; padding: 10px 20px; margin-right: 10px; border-radius: 20px; cursor: pointer; font-family: inherit; font-weight: bold; }
         button:hover { background-color: #2a3a5a; }
         .loading { font-size: 0.8em; color: #888; align-self: flex-start; margin-top: -5px; margin-bottom: 5px; }
+        .header-logo {
+            height: 35px;
+            margin-left: 10px;
+            vertical-align: middle;
+            mix-blend-mode: screen;
+        }
     </style>
 </head>
 <body>
 
 <div class="chat-container">
-    <div class="chat-header">مساعد منصة إسناد</div>
+    <div class="chat-header">
+        <img src="/logo.png" alt="Esnad Logo" class="header-logo">
+        مساعد منصة إسناد
+    </div>
     <div class="chat-box" id="chatBox">
         <div class="message bot-msg">أهلاً بك! أنا مساعد إسناد الذكي. كيف يمكنني مساعدتك اليوم؟</div>
     </div>
