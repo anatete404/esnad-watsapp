@@ -15,7 +15,7 @@ COPY --chown=user . .
 
 USER user
 ENV HOME=/home/user
-PATH=/home/user/.local/bin:$PATH
+ENV PATH=/home/user/.local/bin:$PATH
 
 # Hugging Face بيستخدم بورت 7860
 EXPOSE 7860
